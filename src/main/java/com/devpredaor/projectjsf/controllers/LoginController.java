@@ -7,8 +7,11 @@ import java.io.IOException;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+
+import com.devpredaor.projectjsf.dto.UsuarioDTO;
 
 /**
  * @author Erick Michel cruz ceron Clase que permite controlar el funcionamiento
@@ -26,6 +29,11 @@ public class LoginController {
 	private String password;
 
 	/**
+	 * Bean que mantiene la informacion en sesión.
+	 */
+	@ManagedProperty("#{sessionController}")
+	private SessionController sessionController;
+	/**
 	 * Metodo que nos permite ingresar a la pantalla principal del proyecto
 	 */
 	public void ingresar() {
@@ -35,6 +43,11 @@ public class LoginController {
 					new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuario Correcto", ""));
 			
 			try {
+				UsuarioDTO usuarioDTO = new UsuarioDTO(); 
+				usuarioDTO.setUsuario(this.usuario);
+				usuarioDTO.setPassword(this.password);
+				this.sessionController.setUsuarioDTO(usuarioDTO);
+				
 				this.redireccionar("principal.xhtml");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -81,6 +94,20 @@ public class LoginController {
 	 */
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	/**
+	 * @return the sessionController
+	 */
+	public SessionController getSessionController() {
+		return sessionController;
+	}
+
+	/**
+	 * @param sessionController the sessionController to set
+	 */
+	public void setSessionController(SessionController sessionController) {
+		this.sessionController = sessionController;
 	}
 
 }
